@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Metric Runner: Orchestrates running gen_metric.py with different parameter combinations from YAML config.
 Supports GPU parallelization with proper queue management and job prioritization.
