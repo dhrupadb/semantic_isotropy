@@ -121,7 +121,7 @@ def process_batch_outputs(batch_metadata_to_process, batch_prompts_to_process, r
 @click.option('--model', required=True, help='Name or path of the model to use. Either a HuggingFace model name or an an API based model (e.g. "openai/gpt-4o-mini") etc.')
 @click.option('--input-path', required=True, help='Path to the input JSON file from open_ended_trivia.py')
 @click.option('--output-path', required=True, help='Path to save the output results')
-@click.option('--k', default=5, help='Number of responses to generate per question')
+@click.option('--n', default=5, help='Number of responses to generate per question')
 @click.option('--word-count', default=500, help='Number of words to generate per response')
 @click.option('--batch-size', default=8, help='Batch size for vLLM inference. -1 when using API based models.')
 @click.option('--group-batch-size', default=20, help='Batch size for group writing')
@@ -134,7 +134,7 @@ def process_batch_outputs(batch_metadata_to_process, batch_prompts_to_process, r
 @click.option('--dryrun', is_flag=True, help='Run in dry run mode without making actual LLM calls')
 @click.option('--restart-from-checkpoint', is_flag=True, help='Restart from checkpoint. Resume from the last checkpoint file in the output file.')
 @click.pass_context
-def main(ctx: click.Context, model: str, input_path: str, output_path: str, k: int, word_count: int, batch_size: int,
+def main(ctx: click.Context, model: str, input_path: str, output_path: str, n: int, word_count: int, batch_size: int,
          group_batch_size: int, subset: int, dtype: str, temperature: float, tensor_parallel_size: int, logprobs: bool, top_logprobs: int, dryrun: bool,
          restart_from_checkpoint: bool):
     """Generate responses for open-ended questions using vLLM"""
@@ -176,7 +176,7 @@ def main(ctx: click.Context, model: str, input_path: str, output_path: str, k: i
     logger.info(f"- Model: {model}")
     logger.info(f"- Batch size: {batch_size}")
     logger.info(f"- Group batch size: {group_batch_size}")
-    logger.info(f"- Responses per question: {k}")
+    logger.info(f"- Responses per question: {n}")
     logger.info(f"- Output path: {output_path}")
     logger.info(f"- Logprobs: {logprobs}")
     logger.info(f"- Top logprobs: {top_logprobs}")
@@ -191,22 +191,22 @@ def main(ctx: click.Context, model: str, input_path: str, output_path: str, k: i
         logger.info(f"Sampling {subset} examples from {len(df)} total examples")
         df = df.sample(subset).sort_values(by="index")
 
-    df['_k'] = k
+    df['_n'] = n
     if restart_from_checkpoint:
         df['index_locator'] = df.apply(lambda x: f'{x["index"]}-{x["idx_cat"]}', axis=1)
         df.set_index('index_locator', inplace=True)
         keys_to_run = set()
-        for index, idx_cat, num_k in df[["index", "idx_cat", "_k"]].values:
+        for index, idx_cat, num_n in df[["index", "idx_cat", "_n"]].values:
             key = f'{index}-{idx_cat}'
             if key in existing_results_map:
                 res = existing_results_map[key]
                 missing = 0
 
-                if len(res['responses']) < num_k:
-                    missing = num_k - len(res['responses'])
+                if len(res['responses']) < num_n:
+                    missing = num_n - len(res['responses'])
 
                 if missing > 0:
-                    df.loc[key, '_k'] = missing
+                    df.loc[key, '_n'] = missing
                     keys_to_run.add(key)
             else:
                 keys_to_run.add(key)
@@ -246,7 +246,7 @@ def main(ctx: click.Context, model: str, input_path: str, output_path: str, k: i
     batch_metadata = []
     result_map = {}
 
-    for index, idx_cat, question, num_k in tqdm(df[["index", "idx_cat", "open_ended_question", "_k"]].values, total=df.shape[0], desc="Processing entities / topics"):
+    for index, idx_cat, question, num_n in tqdm(df[["index", "idx_cat", "open_ended_question", "_n"]].values, total=df.shape[0], desc="Processing entities / topics"):
 
         # Process batch when it reaches batch_size
         while len(batch_prompts) >= batch_size:
@@ -279,10 +279,10 @@ def main(ctx: click.Context, model: str, input_path: str, output_path: str, k: i
             result_map = {}
 
         # Create k copies of each prompt
-        prompts = [create_prompts([question], word_count=word_count)[0]] * num_k
+        prompts = [create_prompts([question], word_count=word_count)[0]] * num_n
         batch_prompts.extend(prompts)
         batch_metadata.extend([{'index': index, 'idx_cat': idx_cat, 'question': question,
-                                'entity': question[question.index("'")+1:].replace("'", "").rstrip('.').strip()}] * num_k)
+                                'entity': question[question.index("'")+1:].replace("'", "").rstrip('.').strip()}] * num_n)
 
     iterations = 0
     while len(batch_prompts) > 0 and iterations <= 3:

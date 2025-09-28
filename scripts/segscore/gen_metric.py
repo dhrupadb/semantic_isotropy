@@ -228,7 +228,7 @@ def main(ctx: click.Context, input_path: str, output_path: str, metric: str, emb
                     add_args['api_key'] = scoring_ctx['api_key']
                 if 'rate_limiter' in scoring_ctx:
                     add_args['rate_limiter'] = scoring_ctx['rate_limiter']
-                pooled_state, eigenscore_vec = embedding_density(
+                si, pooled_state, eigenscore_vec = embedding_density(
                     responses,
                     scoring_ctx['embedding_model'],
                     scoring_ctx["tokenizer"],
@@ -238,6 +238,7 @@ def main(ctx: click.Context, input_path: str, output_path: str, metric: str, emb
                     **add_args,
                 )
                 results[key] = {
+                    'semantic_isotropy': si,
                     'pooled_state': pooled_state,
                     'eigenscore_vec': eigenscore_vec,
                     'subset_idx': subset_idx

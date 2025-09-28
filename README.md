@@ -97,33 +97,7 @@ pip install -e .
 
 ## 🚀 Quick Start
 
-<!---
----
-
-## 🚀 Quick Start
-
-Compute **Semantic Isotropy** for a given prompt:
-
-```python
-from src.isotropy import semantic_isotropy_score
-from sentence_transformers import SentenceTransformer
-
-prompts = ["Write a few paragraphs about Paris, France."]
-responses = generate_responses(model="llama-3-8b-instruct", prompt=prompts[0], n=10)
-
-embedder = SentenceTransformer("nomic-ai/nomic-embed-text-v1")
-score = semantic_isotropy_score(responses, embedder)
-print(f"Semantic Isotropy Score: {score:.3f}")
-```
-
-Evaluate **factuality** using **Segment‑Score**:
-
-```python
-from src.segment_score import segment_score
-fact_score = segment_score(response=responses[0], reference="<wiki_text>")
-print(f"Segment‑Score factuality: {fact_score:.2f}")
-```
---->
+TODO(Dhrupad): Quickstart notebook
 
 ---
 ## 📚 Datasets
@@ -162,18 +136,41 @@ TODO(Dhrupad): Make this into a table
 
 To reproduce the main results:
 
-```bash
-# Step 1. Generate responses (Llama 3.1 8B, Phi‑3.5 Mini, GPT‑4.1 Mini)
-python experiments/generate_responses.py --dataset triviaqa --model llama-3.1-8b
+### 1. Generate Set of Prompt Entities
+```
+python scripts/oeq/triviaqa_open_ended_gen.py --output_dir ~/datasets/experiments/triviaqa_entities/
+```
 
-# Step 2. Compute isotropy scores
-python src/isotropy.py --input data/triviaqa_responses.json --embedder nomic-ai/nomic-embed-text-v1
+### 2. Generate Samples for prompts
 
-# Step 3. Compute factuality scores (Segment‑Score)
-python src/segment_score.py --input data/triviaqa_responses.json
+```
+python scripts/oeq/oeq_sample.py --model microsoft/Phi-3.5-mini-instruct --input-path ~/datasets/experiments/triviaqa_entities/triviaqa_oe_prompts.csv --n 20 --batch-size 120 --dtype half
+        --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/responses.json --tensor_parallel_size 4 --temperature 0.7 --group-batch-size 120 --word-count 500
+```
 
-# Step 4. Evaluate correlation
-python experiments/evaluate.py --metric isotropy --scoring segment-score
+Assumes 4 GPU node. Set `tensor_parallel_size` accordingly.
+
+### 3. Segment and Score responses
+```
+python scripts/segscore/oeq_seg_score.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/responses.json
+    --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.json --group-batch-size 50 --model gpt-4.1-mini --dataset triviaqa
+```
+
+### 4. Generate Metrics on Segmented Dataset (using API model to score)
+```
+python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.json --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/si_gemini.pkl
+    --metric si --embedding-model gemini_v001 --device cpu --group-batch-size 100 --response-count 500 --response-max 500
+```
+
+### 5. Generate Metrics on Segmented Dataset (using Open Weight Model)
+```
+python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.json --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/si_deberta.pkl
+    --metric si --embedding-model nomic-ai/nomic-embed-text-v1 --device cuda:0 --group-batch-size 100 --response-count 500 --response-max 500
+```
+
+### 6. Running embedding pipelines using Job Runner Utility [OPTIONAL]
+```
+python scripts/runner -c config/sample.cfg [-d,--dryrun,-q]
 ```
 
 All sampling and experiments can be run on a single node with 4 x NVIDIA V100 GPUs or equivalent.
