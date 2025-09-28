@@ -32,7 +32,7 @@ def load_factscore(factscore_db_path=None):
         entities = [line.strip() for line in f.readlines()]
 
     # 4. Open a sqlite connection
-    factscore_db_path = f"/Users/{os.environ.get('USER')}/datasets/experiments/longform_uq/factscore/enwiki-20230401.db" if not factscore_db_path else factscore_db_path
+    factscore_db_path = f"/Users/{os.environ.get('USER')}/datasets/experiments/semantic_isotropy/factscore/enwiki-20230401.db" if not factscore_db_path else factscore_db_path
     conn = sqlite3.connect(factscore_db_path)
     cursor = conn.cursor()
 

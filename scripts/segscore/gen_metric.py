@@ -10,13 +10,13 @@ from transformers import AutoTokenizer, AutoModel, AutoModelForSequenceClassific
 from typing import Dict, Any
 from pathlib import Path
 
-from longform_uq.datasets.loaders import load_data
-from longform_uq.pipeline.utils import save_config, write_results, init_logger
-from longform_uq.metrics.luq import entailment_score_func, luq
-from longform_uq.metrics.isotropy import embedding_density
-from longform_uq.metrics.entailment import entailment_metrics
-from longform_uq.metrics.graph_uncertainty import graph_uncertainty
-from longform_uq.llm.utils import estimate_tokens, TokenRateLimiter
+from semantic_isotropy.datasets.loaders import load_data
+from semantic_isotropy.pipeline.utils import save_config, write_results, init_logger
+from semantic_isotropy.metrics.luq import entailment_score_func, luq
+from semantic_isotropy.metrics.isotropy import embedding_density
+from semantic_isotropy.metrics.entailment import entailment_metrics
+from semantic_isotropy.metrics.graph_uncertainty import graph_uncertainty
+from semantic_isotropy.llm.utils import estimate_tokens, TokenRateLimiter
 
 
 logger = init_logger(__name__, 'INFO')

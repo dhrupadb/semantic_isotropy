@@ -3,8 +3,8 @@ import torch
 
 from torch import Tensor
 
-from longform_uq.llm.utils import estimate_tokens
-from longform_uq.llm.embed import embed_api
+from semantic_isotropy.llm.utils import estimate_tokens
+from semantic_isotropy.llm.embed import embed_api
 
 
 def header_prompt(entity, text, model_name=''):

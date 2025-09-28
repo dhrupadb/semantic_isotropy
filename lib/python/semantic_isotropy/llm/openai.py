@@ -5,7 +5,7 @@ import datetime
 import tempfile
 import logging
 
-from longform_uq.prompts.oeq import SYSTEM_PROMPT
+from semantic_isotropy.prompts.oeq import SYSTEM_PROMPT
 
 from openai import OpenAI
 from typing import List, Dict, Any, Optional

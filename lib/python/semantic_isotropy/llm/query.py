@@ -3,9 +3,9 @@ from typing import List
 import tiktoken
 import json
 
-from longform_uq.llm.utils import estimate_tokens, TokenRateLimiter, detect_api_model
-from longform_uq.llm.chat import chat_api
-from longform_uq.llm.openai import process_batch_completions as openai_process_batch_completions
+from semantic_isotropy.llm.utils import estimate_tokens, TokenRateLimiter, detect_api_model
+from semantic_isotropy.llm.chat import chat_api
+from semantic_isotropy.llm.openai import process_batch_completions as openai_process_batch_completions
 
 from functools import partial
 

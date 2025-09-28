@@ -1,7 +1,7 @@
-from longform_uq.llm.api import chat_api
-from longform_uq.llm.utils import estimate_tokens
-from longform_uq.pipeline.utils import init_logger
-from longform_uq.llm.utils import estimate_tokens, TokenRateLimiter
+from semantic_isotropy.llm.api import chat_api
+from semantic_isotropy.llm.utils import estimate_tokens
+from semantic_isotropy.pipeline.utils import init_logger
+from semantic_isotropy.llm.utils import estimate_tokens, TokenRateLimiter
 
 import networkx as nx
 

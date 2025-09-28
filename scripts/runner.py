@@ -6,8 +6,8 @@ Supports GPU parallelization with proper queue management and job prioritization
 import click
 
 
-from longform_uq.pipeline.utils import init_logger
-from longform_uq.pipeline.jobs import MetricRunner
+from semantic_isotropy.pipeline.utils import init_logger
+from semantic_isotropy.pipeline.jobs import MetricRunner
 
 logger = init_logger(__name__, 'INFO')
 

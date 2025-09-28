@@ -6,7 +6,7 @@ from openai import OpenAI
 from google import generativeai as genai
 
 from typing import Any, Dict, Optional, Union
-from longform_uq.llm.utils import check_server_availability
+from semantic_isotropy.llm.utils import check_server_availability
 
 
 @retry(delay=5, tries=2)

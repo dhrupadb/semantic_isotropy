@@ -10,7 +10,7 @@ import shutil
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 
-from longform_uq.datasets.utils import get_entity_page_idx
+from semantic_isotropy.datasets.utils import get_entity_page_idx
 
 import datasets
 

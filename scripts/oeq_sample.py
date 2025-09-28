@@ -6,13 +6,13 @@ import json
 from pathlib import Path
 from tqdm import tqdm
 
-from longform_uq.datasets.loaders import load_csv
-from longform_uq.datasets.utils import strip_and_return
-from longform_uq.pipeline.utils import init_logger
-from longform_uq.llm.query import LLM, SamplingParams
-from longform_uq.prompts.oeq import create_prompts
-from longform_uq.pipeline.utils import save_config, write_results
-from longform_uq.llm.utils import detect_api_model
+from semantic_isotropy.datasets.loaders import load_csv
+from semantic_isotropy.datasets.utils import strip_and_return
+from semantic_isotropy.pipeline.utils import init_logger
+from semantic_isotropy.llm.query import LLM, SamplingParams
+from semantic_isotropy.prompts.oeq import create_prompts
+from semantic_isotropy.pipeline.utils import save_config, write_results
+from semantic_isotropy.llm.utils import detect_api_model
 
 
 logger = init_logger(__name__, 'INFO')

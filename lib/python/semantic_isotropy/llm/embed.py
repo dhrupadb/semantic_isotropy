@@ -7,7 +7,7 @@ from google import generativeai as genai
 from openai import OpenAI
 import cohere
 
-from longform_uq.llm.utils import TokenRateLimiter, estimate_tokens
+from semantic_isotropy.llm.utils import TokenRateLimiter, estimate_tokens
 
 
 def apply_rate_limiting(texts: List[str], rate_limiter: Optional[Tuple[TokenRateLimiter, str]], token_estimator: Callable[[str], int] = estimate_tokens) -> None:

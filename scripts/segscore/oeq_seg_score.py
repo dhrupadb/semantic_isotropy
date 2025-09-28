@@ -13,12 +13,12 @@ import pandas as pd
 from pathlib import Path
 from typing import List, Dict, Any
 
-from longform_uq.prompts.segscore import SYSTEM_PROMPT, create_prompt
-from longform_uq.llm.api import chat_api as query_api
-from longform_uq.llm.utils import estimate_tokens, TokenRateLimiter
-from longform_uq.datasets.utils import get_entity_page_idx
-from longform_uq.datasets.loaders import load_triviaqa, load_factscore, load_data
-from longform_uq.pipeline.utils import save_config, write_results
+from semantic_isotropy.prompts.segscore import SYSTEM_PROMPT, create_prompt
+from semantic_isotropy.llm.api import chat_api as query_api
+from semantic_isotropy.llm.utils import estimate_tokens, TokenRateLimiter
+from semantic_isotropy.datasets.utils import get_entity_page_idx
+from semantic_isotropy.datasets.loaders import load_triviaqa, load_factscore, load_data
+from semantic_isotropy.pipeline.utils import save_config, write_results
 
 # Configure logging
 logging.basicConfig(

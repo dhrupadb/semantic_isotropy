@@ -10,7 +10,7 @@ import time
 import datetime
 import hashlib
 
-from longform_uq.pipeline.utils import init_logger
+from semantic_isotropy.pipeline.utils import init_logger
 
 logger = init_logger(__name__)
 
