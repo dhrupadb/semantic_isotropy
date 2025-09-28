@@ -1,6 +1,6 @@
 # Embedding Trust: Semantic Isotropy Predicts Nonfactuality in Long‑Form Text Generation
 
-![Embedding Trust: Semantic Isotropy Predicts Nonfactuality in Long‑Form Text Generation](./assets/main_infographic.pdf)
+![Embedding Trust: Semantic Isotropy Predicts Nonfactuality in Long‑Form Text Generation](./assets/main_infographic.png)
 
 <!---[![Twitter](https://badgen.net/badge/icon/twitter?icon=twitter&label)](https://twitter.com/cong_ml/status/1536352379242676228)
 [![arXiv](https://img.shields.io/badge/arXiv-2206.04779-b31b1b.svg)](https://arxiv.org/abs/2206.04779)
