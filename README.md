@@ -44,8 +44,7 @@ It provides a computationally inexpensive proxy for factual consistency in long�
 │              └── tests             # Unit tests for pipeline utilities
 │
 ├── notebooks/               # Example Jupyter notebooks
-│   ├── demo_isotropy.ipynb
-│   └── visualization.ipynb
+│   └── quickstart.ipynb
 │
 ├── scripts/               # Driver Scripts
 │   ├── oeq
@@ -89,7 +88,7 @@ pip install -e .
 
 ## 🚀 Quick Start
 
-TODO(Dhrupad): Quickstart notebook
+TODO(Dhrupad): Quickstart example
 
 ---
 ## 📚 Datasets
@@ -159,21 +158,22 @@ python scripts/runner -c config/sample.cfg [-d,--dryrun,-q]
 All sampling and experiments can be run on a single node with 4 x NVIDIA V100 GPUs or equivalent.
 
 ---
-<!--
 ## 🧩 Citation
 
 ```bibtex
-@inproceedings{bhardwaj2026embeddingtrust,
-  title={Embedding Trust: Semantic Isotropy Predicts Nonfactuality in Long‑Form Text Generation},
+@misc{bhardwaj2025embeddingtrust,
+      title={Embedding Trust: Semantic Isotropy Predicts Nonfactuality in Long‑Form Text Generation},
   author={Bhardwaj, Dhrupad and Kempe, Julia and Rudner, Tim G. J.},
-  booktitle={Proceedings of the International Conference on Learning Representations (ICLR)},
-  year={2026}
+      year={2025},
+      eprint={TBD},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/TBD}, 
 }
 ```
 ---
--->
 
-
-**Maintainer:** [Anonymous Author(s)]\
-**Contact:** TBD (post‑review release)
+## Contact
+Please contact [Dhrupad Bhardwaj](mailto:db4045*AT*nyu*DOT*edu) or [Tim G.J. Rudner](mailto:tim*AT*timrudner*DOT*com) for any queries.
+We welcome any suggestions or contributions! 
 
