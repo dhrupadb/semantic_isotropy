@@ -88,28 +88,12 @@ pip install -e .
 
 ## 🚀 Quick Start
 
-TODO(Dhrupad): Quickstart example
+See `notebooks/quickstart.ipynb` to view examples of generating and scoring long form text using Semantic Isotropy as well as using the SegmentScore dataset.
 
 ---
 ## 📚 Datasets
 
-
-```bash
-#TODO(DHRUPAD) - UPLOAD DATASETS; INSTRUCTIONS TO DOWNLOAD DATASETS
-
-```
-
-TODO(Dhrupad): Populate Table
-
-| Dataset    | Model        | Total Topics | Avg. Claims / Response | Avg. Word Count | Avg. Factuality | Avg. Isotropy Score (Gemini v1) |
-| --------   | ------------ | ------------| -------|------- | -------------|----------- |
-| TriviaQA   | Llama‑3.1 8B | 1000        |        |        | **0.43**     |            |
-| TriviaQA   | Phi‑3.5 Mini | 1000        |        |        | **0.39**     |            |
-| TriviaQA   | GPT‑4.1 Mini | 1000        |        |        | **0.46**     |            |
-| --------   | -------- | --------| --------|-------- | --------|-------- |
-| FS-BIO   | Llama‑3.1 8B | 182        |        |        | **0.43**     |            |
-| FS-BIO   | Phi‑3.5 Mini | 182        |        |        | **0.39**     |            |
-| FS-BIO   | GPT‑4.1 Mini | 182        |        |        | **0.46**     |            |
+Our dataset can be found on HuggingFace! [dhrupad/SegmentScore](https://huggingface.co/datasets/dhrupadb/SegmentScore)
 
 ---
 
@@ -150,7 +134,7 @@ python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/trivia
 ```
 
 ### 6. Running embedding pipelines using Job Runner Utility [OPTIONAL]
-See the template `config/sample.cfg` file to generate a configuration of scoring tasks. These can be run in a parallelized fashion using the command below: 
+See the template `config/sample.cfg` file to generate a configuration of scoring tasks. These can be run in a parallelized fashion using the command below:
 ```
 python scripts/runner -c config/sample.cfg [-d,--dryrun,-q]
 ```
@@ -168,12 +152,12 @@ All sampling and experiments can be run on a single node with 4 x NVIDIA V100 GP
       eprint={TBD},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/TBD}, 
+      url={https://arxiv.org/abs/TBD},
 }
 ```
 ---
 
 ## Contact
 Please contact [Dhrupad Bhardwaj](mailto:db4045*AT*nyu*DOT*edu) or [Tim G.J. Rudner](mailto:tim*AT*timrudner*DOT*com) for any queries.
-We welcome any suggestions or contributions! 
+We welcome any suggestions or contributions!
 
