@@ -88,12 +88,12 @@ pip install -e .
 
 ## 🚀 Quick Start
 
-See `notebooks/quickstart.ipynb` to view examples of generating and scoring long form text using Semantic Isotropy as well as using the SegmentScore dataset.
+See `notebooks/quickstart.ipynb` to view examples of generating and scoring long form text using **Semantic Isotropy** as well as using the **SegmentScore** dataset.
 
 ---
 ## 📚 Datasets
 
-Our dataset can be found on HuggingFace! [dhrupad/SegmentScore](https://huggingface.co/datasets/dhrupadb/SegmentScore)
+The **SegmentScore** can be found on HuggingFace! [dhrupad/SegmentScore](https://huggingface.co/datasets/dhrupadb/SegmentScore)
 
 ---
 
@@ -110,26 +110,26 @@ python scripts/oeq/triviaqa_open_ended_gen.py --output_dir ~/datasets/experiment
 
 ```
 python scripts/oeq/oeq_sample.py --model microsoft/Phi-3.5-mini-instruct --input-path ~/datasets/experiments/triviaqa_entities/triviaqa_oe_prompts.csv --n 20 --batch-size 120 --dtype half
-        --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/responses.json --tensor_parallel_size 4 --temperature 0.7 --group-batch-size 120 --word-count 500
+        --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/responses.jsonl --tensor_parallel_size 4 --temperature 0.7 --group-batch-size 120 --word-count 500
 ```
 
 Assumes 4 GPU node. Set `tensor_parallel_size` accordingly.
 
 ### 3. Segment and Score responses
 ```
-python scripts/segscore/oeq_seg_score.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/responses.json
-    --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.json --group-batch-size 50 --model gpt-4.1-mini --dataset triviaqa
+python scripts/segscore/oeq_seg_score.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/responses.jsonl
+    --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.jsonl --group-batch-size 50 --model gpt-4.1-mini --dataset triviaqa
 ```
 
 ### 4. Generate Metrics on Segmented Dataset (using API model to score)
 ```
-python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.json --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/si_gemini.pkl
+python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.jsonl --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/si_gemini.pkl
     --metric si --embedding-model gemini_v001 --device cpu --group-batch-size 100 --response-count 500 --response-max 500
 ```
 
 ### 5. Generate Metrics on Segmented Dataset (using Open Weight Model)
 ```
-python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.json --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/si_deberta.pkl
+python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/seg_score.jsonl --output-path ~/datasets/experiments/triviaqa_entities/oeq_sample_msft_phi3.5-mini-instruct/si_deberta.pkl
     --metric si --embedding-model nomic-ai/nomic-embed-text-v1 --device cuda:0 --group-batch-size 100 --response-count 500 --response-max 500
 ```
 
