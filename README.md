@@ -88,12 +88,12 @@ pip install -e .
 
 ## 🚀 Quick Start
 
-See `notebooks/quickstart.ipynb` to view examples of generating and scoring long form text using Semantic Isotropy as well as using the SegmentScore dataset.
+See `notebooks/quickstart.ipynb` to view examples of generating and scoring long form text using **Semantic Isotropy** as well as using the **SegmentScore** dataset.
 
 ---
 ## 📚 Datasets
 
-Our dataset can be found on HuggingFace! [dhrupad/SegmentScore](https://huggingface.co/datasets/dhrupadb/SegmentScore)
+The **SegmentScore** can be found on HuggingFace! [dhrupad/SegmentScore](https://huggingface.co/datasets/dhrupadb/SegmentScore)
 
 ---
 
@@ -124,13 +124,11 @@ python scripts/segscore/oeq_seg_score.py --input-path ~/datasets/experiments/tri
 ### 4. Generate Metrics on Segmented Dataset (using API model to score)
 ```
 python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/triviaqa/oeq_sample_msft_phi3.5-mini-instruct/seg_score.jsonl --output-path ~/datasets/experiments/triviaqa/oeq_sample_msft_phi3.5-mini-instruct/si_gemini.pkl
-    --metric si --embedding-model gemini_v001 --device cpu --group-batch-size 100 --response-count 500 --response-max 500
 ```
 
 ### 5. Generate Metrics on Segmented Dataset (using Open Weight Model)
 ```
 python scripts/segscore/gen_metric.py --input-path ~/datasets/experiments/triviaqa/oeq_sample_msft_phi3.5-mini-instruct/seg_score.jsonl --output-path ~/datasets/experiments/triviaqa/oeq_sample_msft_phi3.5-mini-instruct/si_deberta.pkl
-    --metric si --embedding-model nomic-ai/nomic-embed-text-v1 --device cuda:0 --group-batch-size 100 --response-count 500 --response-max 500
 ```
 
 ### 6. Running embedding pipelines using Job Runner Utility [OPTIONAL]
