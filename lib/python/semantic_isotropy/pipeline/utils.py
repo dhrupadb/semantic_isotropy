@@ -43,6 +43,8 @@ def write_results(output_path: str, result_map: Dict[str, Any], coalesce_func: C
     temp_path = output_path + '.tmp'
     if output_path.endswith('.json'):
         ftype = 'json'
+    elif output_path.endswith('.jsonl'):
+        ftype = 'jsonl'
     elif output_path.endswith('.pkl'):
         ftype = 'pickle'
     else:
@@ -57,6 +59,9 @@ def write_results(output_path: str, result_map: Dict[str, Any], coalesce_func: C
             if ftype == 'json':
                 with open(output_path, 'r', encoding='utf-8') as f:
                     existing_results = json.load(f)
+            elif ftype == 'jsonl':
+                with open(output_path, 'r', encoding='utf-8') as f:
+                    existing_results = [json.loads(line) for line in f]
             elif ftype == 'pickle':
                 with open(output_path, 'rb') as f:
                     existing_results = pickle.load(f)
@@ -67,6 +72,12 @@ def write_results(output_path: str, result_map: Dict[str, Any], coalesce_func: C
         if ftype == 'json':
             with open(temp_path, 'w', encoding='utf-8') as f:
                 json.dump(coalesced_results, f, indent=2, ensure_ascii=False)
+                f.flush()
+                os.fsync(f.fileno())
+        elif ftype == 'jsonl':
+            with open(temp_path, 'w', encoding='utf-8') as f:
+                for item in coalesced_results:
+                    f.write(json.dumps(item, ensure_ascii=False) + '\n')
                 f.flush()
                 os.fsync(f.fileno())
         elif ftype == 'pickle':

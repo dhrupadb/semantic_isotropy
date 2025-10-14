@@ -51,6 +51,8 @@ def load_data(input_path: str) -> List[Dict[str, Any]]:
     logger.info(f"Loading data from {input_path}")
     if input_path.endswith('.json'):
         ftype = 'json'
+    elif input_path.endswith('.jsonl'):
+        ftype = 'jsonl'
     elif input_path.endswith('.pkl'):
         ftype = 'pickle'
     else:
@@ -59,6 +61,9 @@ def load_data(input_path: str) -> List[Dict[str, Any]]:
     if ftype == 'json':
         with open(input_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
+    elif ftype == 'jsonl':
+        with open(input_path, 'r', encoding='utf-8') as f:
+            data = [json.loads(line) for line in f]
     elif ftype == 'pickle':
         with open(input_path, 'rb') as f:
             data = pickle.load(f)
