@@ -16,6 +16,21 @@ def load_triviaqa():
     logger.info("Loading TriviaQA dataset")
     return load_dataset("trivia_qa", "rc.wikipedia")
 
+def load_booksummaries(booksummaries_path=None):
+    """Load BookSummaries dataset
+
+    Args:
+        booksummaries_path: Path to the booksummaries_summaries.csv file.
+                           If not provided, uses default path.
+    """
+    logger.info("Loading BookSummaries dataset")
+    bs_data_path = booksummaries_path or f"/Users/{os.environ.get('USER')}/datasets/experiments/semantic_isotropy/oeq_prompts_booksummaries/booksummaries_summaries.csv"
+    bsdf = pd.read_csv(bs_data_path)
+    bsdf['entity'] = bsdf[['author', 'title', 'pub_dt_str']]\
+        .apply(lambda r: "{} written by {} in the year {}".format(r[1].replace("'", ""), str(r[0]).replace("'", ""), r[2]), axis=1)
+    results = {r['entity']: r['plot'] for _, r in bsdf[['entity', 'plot']].iterrows()}
+    return results
+
 def load_factscore(factscore_db_path=None):
     """Load FactScore-Bio Wikipedia dataset"""
     logger.info("Loading FactScore-Bio dataset")
