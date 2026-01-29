@@ -143,14 +143,14 @@ All sampling and experiments can be run on a single node with 4 x NVIDIA V100 GP
 ## 🧩 Citation
 
 ```bibtex
-@misc{bhardwaj2025embeddingtrust,
-      title={Embedding Trust: Semantic Isotropy Predicts Nonfactuality in Long‑Form Text Generation},
-  author={Bhardwaj, Dhrupad and Kempe, Julia and Rudner, Tim G. J.},
+@misc{bhardwaj2025embeddingtrustsemanticisotropy,
+      title={Embedding Trust: Semantic Isotropy Predicts Nonfactuality in Long-Form Text Generation},
+      author={Dhrupad Bhardwaj and Julia Kempe and Tim G. J. Rudner},
       year={2025},
-      eprint={TBD},
+      eprint={2510.21891},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/TBD},
+      url={https://arxiv.org/abs/2510.21891},
 }
 ```
 ---
