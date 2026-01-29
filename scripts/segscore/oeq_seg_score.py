@@ -17,7 +17,7 @@ from longform_uq.prompts.segscore import SYSTEM_PROMPT, create_prompt
 from longform_uq.llm.api import chat_api as query_api
 from longform_uq.llm.utils import estimate_tokens, TokenRateLimiter
 from longform_uq.datasets.utils import get_entity_page_idx
-from longform_uq.datasets.loaders import load_triviaqa, load_factscore, load_data
+from longform_uq.datasets.loaders import load_triviaqa, load_factscore, load_data, load_booksummaries
 from longform_uq.pipeline.utils import save_config, write_results
 
 # Configure logging
@@ -135,7 +135,7 @@ def process_row(idx, row, entity, reference_doc, key, model, rate_limiter, dryru
         estimated_tokens = estimate_tokens(prompt + SYSTEM_PROMPT) + estimate_tokens(row['response']) + estimate_tokens("<statements>" + "<statement></statement><class>1</class>"*40 + "</statements>")
         rate_limiter.add_tokens(estimated_tokens)
         result = query_api(prompt, api='openai', system=SYSTEM_PROMPT,
-                             logprobs=True, top_logprobs=2, model=model, api_key=API_KEY)
+                             logprobs=True, top_logprobs=2, model=model)
         logger.debug(f"{key}: {idx} Completed API call.")
         logprobs = {"tokens": [x.token for x in result['logprobs']],
                  "logprobs": [x.logprob for x in result['logprobs']],
@@ -149,7 +149,7 @@ def process_row(idx, row, entity, reference_doc, key, model, rate_limiter, dryru
                 logger.error(f"Error parsing response for {key}: {e}. Retrying with temperature=0.0.")
                 rate_limiter.add_tokens(estimated_tokens)
                 result = query_api(prompt, api='openai', temperature=0.0, system=SYSTEM_PROMPT,
-                                    logprobs=True, top_logprobs=2, model=model, api_key=API_KEY)
+                                    logprobs=True, top_logprobs=2, model=model)
                 logprobs = {"tokens": [x.token for x in result['logprobs']],
                         "logprobs": [x.logprob for x in result['logprobs']],
                         "top_logprobs": [(x.top_logprobs[0], x.top_logprobs[1]) for x in result['logprobs']]}
@@ -214,7 +214,7 @@ def process_group(group, entity, reference_doc, key, model, rate_limiter, dryrun
 @click.option('--group-batch-size', default=20, help='Number of entries to process before writing')
 @click.option('--subset', default=None, type=int, help='Subset of data to process (testing purposes)')
 @click.option('--model', default='gpt-4.1-mini', help='Model to use for segmentation')
-@click.option('--dataset', default='triviaqa', help='Dataset: TriviaQA (triviaqa) or FactScore-Bio (factscore)', type=click.Choice(['triviaqa', 'factscore']))
+@click.option('--dataset', default='triviaqa', help='Dataset: TriviaQA (triviaqa), BookSummaries (bs), or FactScore-Bio (factscore)', type=click.Choice(['triviaqa', 'factscore', 'bs']))
 @click.option('--overwrite', is_flag=True, help='Overwrite output file if it exists')
 @click.option('--dryrun', is_flag=True, help='Simulate pipeline execution without making API calls')
 @click.option('--seed', default=None, type=int, help='Random seed for reproducible sampling')
@@ -296,6 +296,8 @@ def main(ctx: click.Context, input_path: str, output_path: str, group_batch_size
         triviaqa = load_triviaqa()
     elif dataset == 'factscore':
         factscore = load_factscore()
+    elif dataset == 'bs':
+        bs = load_booksummaries()
     else:
         raise ValueError(f"Invalid dataset: {dataset}")
 
@@ -323,6 +325,9 @@ def main(ctx: click.Context, input_path: str, output_path: str, group_batch_size
                     reference_doc = factscore["Paul O'Neill (racing driver)"] # Correct edge case.
                 else:
                     reference_doc = factscore[entity]
+                entity_page_idx = 0
+            elif dataset == 'bs':
+                reference_doc = bs[entity]
                 entity_page_idx = 0
 
             try:

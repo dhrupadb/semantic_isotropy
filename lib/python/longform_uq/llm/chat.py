@@ -28,7 +28,7 @@ def chat_api(request: str, api: str = "anthropic", **kwargs: Any) -> Union[Dict[
     else:
         raise ValueError(f"Unsupported API {api}")
 
-def chat_gpt(request: str, model: str = 'gpt-4o-mini', **kwargs: Any) -> Dict[str, Optional[Union[str, Any]]]:
+def chat_gpt(request: str, model: str = 'gpt-4.1-mini', **kwargs: Any) -> Dict[str, Optional[Union[str, Any]]]:
     """
     Queries the OpenAI API to generate a response from a language model.
 
@@ -88,7 +88,7 @@ def chat_gpt(request: str, model: str = 'gpt-4o-mini', **kwargs: Any) -> Dict[st
         print(f"Error occurred with OpenAI API: {str(e)}")
         return {'response': None, 'logprobs': None, 'message': None}
 
-def chat_gemini(request: str, model: str = 'gemini-2.0-flash', **kwargs: Any) -> Dict[str, Optional[Union[str, Any]]]:
+def chat_gemini(request: str, model: str = 'gemini-2.5-flash', **kwargs: Any) -> Dict[str, Optional[Union[str, Any]]]:
     """
     Queries the Google Gemini API to generate a response from a language model.
 
@@ -114,11 +114,11 @@ def chat_gemini(request: str, model: str = 'gemini-2.0-flash', **kwargs: Any) ->
 
     system = kwargs.get('system', '')
     if system:
-        messages.insert(0, {"role": "system", "parts": [system]})
+        messages.insert(0, {"role": "user", "parts": [f"SYSTEM PROMPT: {system}"]})
 
     prefill = kwargs.get('prefill', None)
     if prefill:
-        messages.append({"role": "assistant", "parts": [prefill]})
+        messages.append({"role": "model", "parts": [prefill]})
 
     try:
         model_obj = genai.GenerativeModel(model)
@@ -205,7 +205,7 @@ def chat_deepseek(request: str, model: str = 'deepseek-chat', **kwargs: Any) -> 
         print(f"Error occurred: {str(e)}")
         return {'response': None, 'logprobs': None, 'message': None}
 
-def chat_claude(request: str, model: str = 'claude-3-5-sonnet-20240620', **kwargs: Any) -> str:
+def chat_claude(request: str, model: str = 'claude-sonnet-4-20250514', **kwargs: Any) -> str:
     """
     Queries the Anthropic API to generate a response from a language model.
 

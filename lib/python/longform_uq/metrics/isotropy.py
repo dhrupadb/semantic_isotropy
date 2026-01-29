@@ -37,6 +37,34 @@ def calculate_eigenscore(Z, alpha=1e-3):
     return eigenscore
 ###################
 
+def entropy(p):
+    prob = np.array(p)
+    prob[prob == 0] = 1e-10
+    return -1*np.sum(prob*np.log(prob))
+
+def get_Z(X, sample_idx=None):
+    if sample_idx is not None:
+        X = X[sample_idx]
+
+    X = X.astype(float)
+    k = X.shape[0]
+
+    norm = np.linalg.norm(X, axis=1).reshape(-1, 1)
+    X_norm = X / norm
+
+    assert np.isclose((X_norm ** 2).sum(axis=1), np.ones(X_norm.shape[0]), rtol=0.0000001).all(), "Norm not equal to one in some dimensions. Investigate"
+
+    Z = X_norm @ X_norm.T
+    return Z
+
+def get_vn(X, jitter=1e-3, sample_idx=None):
+    Z = get_Z(X, sample_idx)
+    k = Z.shape[0]
+    Z += np.eye(Z.shape[0]) * jitter
+    eigvals = np.linalg.eigvals(Z)
+    return entropy(eigvals/k)
+
+
 def get_embedding_density(entity, responses, model, tokenizer, pooling_method="mean", max_length=1000, device=torch.device("mps"),
                        use_multi_gpu=False, model_name='', rate_limiter=None, api_key=None, task_type=None):
     structured_responses = [header_prompt(entity, response['response'], model_name) for response in responses]
@@ -95,4 +123,5 @@ def embedding_density(responses, model, tokenizer, entity, max_length=1000, pool
                   use_multi_gpu=False, model_name='', rate_limiter=None, api_key=None, task_type=None):
     pooled_state, eigenscore_vec,  = get_embedding_density(entity, responses, model, tokenizer, pooling_method, max_length, device,
                                                                                                use_multi_gpu, model_name, rate_limiter, api_key, task_type)
-    return pooled_state, eigenscore_vec
+    si = get_vn(pooled_state)
+    return si, pooled_state, eigenscore_vec
