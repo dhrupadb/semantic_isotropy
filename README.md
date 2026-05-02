@@ -3,9 +3,7 @@
 ![Embedding Trust: Semantic Isotropy Predicts Nonfactuality in Long‑Form Text Generation](./assets/main_infographic.png)
 
 
-<!---
-[![arXiv](https://img.shields.io/badge/arXiv-TBD-b31b1b.svg)](https://arxiv.org/abs/TBD)
--->
+[![arXiv](https://img.shields.io/badge/arXiv-2510.21891-b31b1b.svg)](https://arxiv.org/abs/2510.21891)
 
 This repository contains end-to-end instructions and pipelines to reproduce and generate the empricial evaluation presented in the paper:
 
